@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TownPlanPay — Demo</title>
+  <style>
+    body{font-family:Inter,system-ui,Arial,sans-serif;background:#0b1020;color:#e6eef8;padding:18px;min-height:100vh}
+    .card{max-width:760px;margin:0 auto;background:#0f1724;padding:18px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.6)}
+    h1{font-size:20px;margin:0 0 8px}
+    textarea{width:100%;min-height:100px;padding:8px;border-radius:6px;border:1px solid #223; background:#08101a;color:#e6eef8}
+    button{background:#0b63b3;color:white;border:0;padding:10px 14px;border-radius:8px;font-weight:600;margin-top:8px}
+    .result{margin-top:14px;padding:10px;border-radius:8px;background:#07121a;border:1px solid #123}
+    .row{display:flex;gap:10px;align-items:center}
+    @media(max-width:520px){.row{flex-direction:column;align-items:stretch}}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>TownPlanPay — Demo (mock)</h1>
+    <p>Paste a short milestone description and press Submit. This demo will call <code>/suggest-milestone</code> (mocked) and show the AI suggestion.</p>
+
+    <label for="desc">Milestone description</label>
+    <textarea id="desc" placeholder="e.g., Install 50m of water pipe, inspector photos attached..."></textarea>
+
+    <div class="row">
+      <button id="submit">Submit</button>
+      <button id="use-sim" style="background:#1e8a4b">Use sample input</button>
+    </div>
+
+    <div id="out" class="result" style="display:none"></div>
+  </div>
+
+<script>
+const out = document.getElementById('out');
+const desc = document.getElementById('desc');
+const submit = document.getElementById('submit');
+const useSim = document.getElementById('use-sim');
+
+function render(resp){
+  out.style.display = 'block';
+  out.innerHTML = '<strong>Decision:</strong> ' + resp.decision +
+    '<br><strong>Suggested amount:</strong> ' + resp.suggested_amount +
+    '<br><strong>Confidence:</strong> ' + (Math.round(resp.confidence*100) + '%') +
+    '<br><strong>Explanation:</strong> ' + (resp.explanation || '');
+}
+
+async function callSuggest(payload){
+  // Try real endpoint; fall back to local mock if request fails
+  try {
+    const res = await fetch('/suggest-milestone', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    if(!res.ok) throw new Error('non-200');
+    return await res.json();
+  } catch(e){
+    // local mock evaluator
+    const image_score = 0.7;
+    const inspector_confidence = 0.8;
+    const percent_complete = 0.6;
+    const score = image_score*0.5 + inspector_confidence*0.3 + percent_complete*0.2;
+    const decision = score > 0.6 ? 'approve' : 'deny';
+    const suggested_amount = Math.round(percent_complete * 1000 * score * 100)/100;
+    return {
+      decision,
+      suggested_amount,
+      explanation: 'Mock heuristic: weighted score ' + score.toFixed(2),
+      confidence: Math.min(1, score)
+    };
+  }
+}
+
+submit.onclick = async () => {
+  out.style.display='none';
+  submit.disabled = true;
+  const payload = { description: desc.value || '', timestamp: Date.now() };
+  const suggestion = await callSuggest(payload);
+  render(suggestion);
+  submit.disabled = false;
+};
+
+useSim.onclick = () => {
+  desc.value = 'Install drainage pipes along 200m; photos attached; inspector: 0.8';
+};
+</script>
+</body>
+      </html>
