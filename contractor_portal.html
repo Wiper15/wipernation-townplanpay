@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TownPlanPay - Contractor Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        h1, h2, h3 { color: #333; }
+        .container {
+            border: 1px solid #ddd;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .approved {
+            background: #d4edda;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .pending {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .denied {
+            background: #f8d7da;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        input, select, textarea, button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #0056b3;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background: #f1f1f1;
+        }
+        #result p { margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <h1>🏗️ TownPlanPay - Contractor Portal</h1>
+
+    <!-- Project Overview -->
+    <div class="container">
+        <h2>Project: Road Construction #RD-2024-001</h2>
+        <p><strong>Municipality:</strong> Lagos City Council</p>
+        <p><strong>Total Budget:</strong> $50,000 | <strong>Paid:</strong> $15,000 | <strong>Remaining:</strong> $35,000</p>
+    </div>
+
+    <!-- Milestone Submission -->
+    <div class="container">
+        <h3>Submit Milestone Evidence</h3>
+        <form id="milestoneForm">
+            <input type="text" id="projectId" value="RD-2024-001" readonly>
+            <select id="milestoneType" required>
+                <option value="">Select Milestone</option>
+                <option value="site_prep">Site Preparation</option>
+                <option value="foundation">Foundation Work</option>
+                <option value="paving">Road Paving</option>
+                <option value="completion">Project Completion</option>
+            </select>
+            <textarea id="evidence" placeholder="Describe work completed or paste photo URLs..." rows="4" required></textarea>
+            <button type="submit">Submit for AI Review</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <!-- Milestone Status -->
+    <div class="container">
+        <h3>Milestone Status</h3>
+        <div class="approved">
+            <h4>✅ Site Preparation - $5,000</h4>
+            <p>Paid: Oct 15, 2024 | TX: mock_tx_RD-2024-001_site_prep</p>
+        </div>
+        <div class="approved">
+            <h4>✅ Foundation Work - $10,000</h4>
+            <p>Paid: Oct 25, 2024 | TX: mock_tx_RD-2024-001_foundation</p>
+        </div>
+        <div class="pending">
+            <h4>🔄 Road Paving - $15,000</h4>
+            <p>Status: Awaiting AI Review</p>
+        </div>
+    </div>
+
+    <!-- Transaction History -->
+    <div class="container">
+        <h3>Payment History</h3>
+        <table id="paymentTable">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Milestone</th>
+                    <th>Amount</th>
+                    <th>Transaction ID</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>2024-10-15</td><td>Site Preparation</td><td>$5,000</td><td>mock_tx_001</td><td>✅ Paid</td></tr>
+                <tr><td>2024-10-25</td><td>Foundation Work</td><td>$10,000</td><td>mock_tx_002</td><td>✅ Paid</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.getElementById('milestoneForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const resultDiv = document.getElementById('result');
+            const evidence = document.getElementById('evidence').value.trim();
+            const milestoneType = document.getElementById('milestoneType').value;
+
+            if (!milestoneType) {
+                alert('Please select a milestone type.');
+                return;
+            }
+
+            resultDiv.innerHTML = '<div class="pending"><p>🔄 AI is analyzing your evidence...</p></div>';
+
+            // Simulate AI analysis delay
+            setTimeout(() => {
+                if (evidence.length > 10) {
+                    const confidence = (Math.random() * (95 - 75) + 75).toFixed(2);
+                    resultDiv.innerHTML = `
+                        <div class="approved">
+                            <h3>✅ PAYMENT APPROVED</h3>
+                            <p><strong>Milestone:</strong> ${milestoneType.replace('_', ' ')}</p>
+                            <p><strong>Amount:</strong> $15,000</p>
+                            <p><strong>AI Confidence:</strong> ${confidence}%</p>
+                            <p><strong>Reason:</strong> Evidence verified as completed milestone with adequate proof.</p>
+                            <button onclick="executePayment(15000, '${milestoneType}')">Execute USDC Payment</button>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="denied">
+                            <h3>❌ APPROVAL DENIED</h3>
+                            <p><strong>Reason:</strong> Insufficient evidence provided. Please include photos or detailed descriptions.</p>
+                        </div>
+                    `;
+                }
+            }, 2000);
+        });
+
+        function executePayment(amount, milestone) {
+            const table = document.querySelector("#paymentTable tbody");
+            const date = new Date().toISOString().split('T')[0];
+            const txId = `mock_tx_${Date.now()}`;
+
+            // Append new row to payment history
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${date}</td>
+                <td>${milestone.replace('_', ' ')}</td>
+                <td>$${amount}</td>
+                <td>${txId}</td>
+                <td>✅ Paid</td>
+            `;
+            table.appendChild(row);
+
+            alert(`💰 Payment of $${amount} executed!\nTransaction ID: ${txId}`);
+
+            // TODO: Replace mock payment with actual USDC on-chain logic
+        }
+    </script>
+</body>
+</html>
