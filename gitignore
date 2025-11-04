@@ -1,0 +1,61 @@
+# ===============================
+# 🌍 TownPlanPay Project .gitignore
+# Optimized for Python + Node.js + Frontend
+# Year: 2025
+# ===============================
+
+# --- Environment Variables ---
+.env
+.env.local
+.env.production
+
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual Environments
+venv/
+.env/
+.venv/
+
+# Build outputs
+build/
+dist/
+
+# Coverage reports
+.coverage
+htmlcov/
+
+# --- Node.js ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+
+# --- Logs ---
+logs/
+*.log
+
+# --- Databases ---
+*.db
+*.sqlite
+
+# --- IDE / Editor ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- OS / System Files ---
+.DS_Store
+Thumbs.db
+
+# --- Temporary Files ---
+*.tmp
+*.temp
