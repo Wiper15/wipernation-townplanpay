@@ -5,94 +5,175 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TownPlanPay - Contractor Portal</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #f8f9fa;
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            background: #f5f5f5;
         }
-        h1, h2, h3 { color: #333; }
-        .container {
-            border: 1px solid #ddd;
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 15px 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        .container { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        .approved {
-            background: #d4edda;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 10px;
+        h1 { color: #2c5aa0; text-align: center; }
+        p { text-align: center; color: #444; }
+        .form-group { margin: 20px 0; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; }
+        input, textarea, select { 
+            width: 100%; 
+            padding: 10px; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+            box-sizing: border-box;
         }
-        .pending {
-            background: #fff3cd;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-        .denied {
-            background: #f8d7da;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-        input, select, textarea, button {
+        button { 
+            background: #2c5aa0; 
+            color: white; 
+            padding: 12px 30px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 16px;
             width: 100%;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
         }
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            font-weight: bold;
+        button:hover { background: #1e3d6f; }
+        .result { 
+            margin-top: 20px; 
+            padding: 15px; 
+            border-radius: 5px; 
+            display: none;
         }
-        button:hover {
-            background-color: #0056b3;
-            cursor: pointer;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background: #f1f1f1;
-        }
-        #result p { margin: 5px 0; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .loading { display: none; text-align: center; color: #2c5aa0; font-weight: bold; }
+        .preview img { width: 100px; margin: 5px; border-radius: 5px; }
     </style>
 </head>
 <body>
-    <h1>🏗️ TownPlanPay - Contractor Portal</h1>
-
-    <!-- Project Overview -->
     <div class="container">
-        <h2>Project: Road Construction #RD-2024-001</h2>
-        <p><strong>Municipality:</strong> Lagos City Council</p>
-        <p><strong>Total Budget:</strong> $50,000 | <strong>Paid:</strong> $15,000 | <strong>Remaining:</strong> $35,000</p>
+        <h1>🏗️ TownPlanPay Contractor Portal</h1>
+        <p>Submit milestone evidence for AI verification and instant USDC payment.</p>
+        
+        <form id="milestoneForm">
+            <div class="form-group">
+                <label for="projectName">Project Name:</label>
+                <input type="text" id="projectName" placeholder="e.g., Lagos Road Rehabilitation" required>
+            </div>
+
+            <div class="form-group">
+                <label for="walletAddress">Contractor Wallet Address:</label>
+                <input type="text" id="walletAddress" placeholder="e.g., 0xabc123..." required>
+            </div>
+            
+            <div class="form-group">
+                <label for="milestone">Milestone:</label>
+                <select id="milestone" required>
+                    <option value="">Select Milestone</option>
+                    <option value="site_prep">Site Preparation & Mobilization</option>
+                    <option value="foundation">Foundation & Drainage Complete</option>
+                    <option value="road_base">Road Base Compacted</option>
+                    <option value="final_surface">Final Surface & Markings</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="evidencePhotos">Upload Evidence Photos (Multiple):</label>
+                <input type="file" id="evidencePhotos" multiple accept="image/*">
+                <div class="preview" id="photoPreview"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="gpsCoordinates">GPS Coordinates:</label>
+                <input type="text" id="gpsCoordinates" placeholder="e.g., 6.5244° N, 3.3792° E" required>
+                <button type="button" id="autofillGPS">📍 Autofill GPS</button>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Work Description:</label>
+                <textarea id="description" rows="4" placeholder="Describe the completed work..." required></textarea>
+            </div>
+            
+            <button type="submit">Submit for AI Verification</button>
+        </form>
+        
+        <div class="loading" id="loading">
+            🔍 AI is verifying your submission... Please wait.
+        </div>
+        
+        <div class="result success" id="successResult">
+            <h3>✅ Milestone Approved!</h3>
+            <p><strong>AI Confidence:</strong> <span id="confidenceScore">92%</span></p>
+            <p><strong>Approved Amount:</strong> <span id="approvedAmount">5,000</span> USDC</p>
+            <p><strong>Transaction ID:</strong> <span id="transactionId">0x7d9e...c42a</span></p>
+            <p>Payment processing initiated. Funds will arrive in your wallet shortly.</p>
+        </div>
+        
+        <div class="result error" id="errorResult">
+            <h3>❌ Verification Failed</h3>
+            <p id="errorMessage">Insufficient evidence provided. Please upload more photos and try again.</p>
+        </div>
     </div>
 
-    <!-- Milestone Submission -->
-    <div class="container">
-        <h3>Submit Milestone Evidence</h3>
-        <form id="milestoneForm">
-            <input type="text" id="projectId" value="RD-2024-001" readonly>
-            <select id="milestoneType" required>
-                <option value="">Select Milestone</option>
-                <option value="site_prep">Site Preparation</option>
-                <option value="foundation">Foundation Work</option>
-                <option value="paving">Road Paving</option>
-                <option value="completion">Project Completion</option>
+    <script>
+        // Autofill GPS using browser location
+        document.getElementById('autofillGPS').addEventListener('click', function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(pos) {
+                        document.getElementById('gpsCoordinates').value = 
+                            pos.coords.latitude.toFixed(6) + ", " + pos.coords.longitude.toFixed(6);
+                    },
+                    function() {
+                        alert('Unable to retrieve GPS location. Please enter manually.');
+                    }
+                );
+            } else {
+                alert('Geolocation not supported by this browser.');
+            }
+        });
+
+        // Image preview
+        document.getElementById('evidencePhotos').addEventListener('change', function(e) {
+            const previewContainer = document.getElementById('photoPreview');
+            previewContainer.innerHTML = '';
+            Array.from(e.target.files).forEach(file => {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                previewContainer.appendChild(img);
+            });
+        });
+
+        // Mock AI verification simulation
+        document.getElementById('milestoneForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('successResult').style.display = 'none';
+            document.getElementById('errorResult').style.display = 'none';
+            
+            setTimeout(function() {
+                document.getElementById('loading').style.display = 'none';
+                
+                const isApproved = Math.random() > 0.3; // 70% chance approval
+                if (isApproved) {
+                    document.getElementById('successResult').style.display = 'block';
+                    document.getElementById('confidenceScore').textContent = '92%';
+                    document.getElementById('approvedAmount').textContent = '5,000';
+                    document.getElementById('transactionId').textContent = 
+                        '0x' + Math.random().toString(16).substr(2, 10) + '...' + Math.random().toString(16).substr(2, 4);
+                } else {
+                    document.getElementById('errorResult').style.display = 'block';
+                    document.getElementById('errorMessage').textContent = 
+                        'AI verification failed. Please ensure photos are clear and GPS coordinates are accurate.';
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html>                <option value="completion">Project Completion</option>
             </select>
             <textarea id="evidence" placeholder="Describe work completed or paste photo URLs..." rows="4" required></textarea>
             <button type="submit">Submit for AI Review</button>
