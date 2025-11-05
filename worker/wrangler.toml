@@ -1,0 +1,6 @@
+name = "townplanpay-worker"
+main = "index.js"
+compatibility_date = "2025-11-05"
+
+[dev]
+port = 3000
