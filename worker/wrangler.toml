@@ -2,5 +2,11 @@ name = "townplanpay-worker"
 main = "index.js"
 compatibility_date = "2025-11-05"
 
+# Cloudflare account used for publishing (set from `wrangler whoami`)
+account_id = "4d98d7fac28853ca4c3f64006a630d13"
+workers_dev = true
+
 [dev]
 port = 3000
+
+# Note: do not leave secrets in `wrangler.toml` for production. Use `wrangler secret put`.

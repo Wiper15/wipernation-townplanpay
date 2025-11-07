@@ -5,6 +5,9 @@ import TransactionHistory from './TransactionHistory';
 import ProjectStatus from './ProjectStatus';
 
 export default function App() {
+  // Base API URL comes from Vite env variable; fall back to proxy-relative paths if not set
+  const API = import.meta.env.VITE_API_URL || '';
+  const buildUrl = (path) => API ? `${API.replace(/\/$/, '')}${path}` : path;
   const [transactions, setTransactions] = useState([
     {
       date: '2024-10-15',
@@ -34,7 +37,7 @@ export default function App() {
 
     try {
       // Call the /suggest-milestone endpoint
-      const response = await fetch('/suggest-milestone', {
+      const response = await fetch(buildUrl('/suggest-milestone'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -72,7 +75,7 @@ export default function App() {
 
   const executePayout = async (aiDecision, formData) => {
     try {
-      const payoutResponse = await fetch('/execute-payout', {
+      const payoutResponse = await fetch(buildUrl('/execute-payout'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

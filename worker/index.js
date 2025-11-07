@@ -35,7 +35,14 @@ async function handle(request){
   if(request.method === 'POST' && url.pathname.endsWith('/execute-payout')){
     // IMPORTANT: this stub only simulates the payout flow.
     // Replace with Circle SDK / REST API call server-side in production.
-    // Ensure you store CIRCLE_API_KEY in Worker secrets.
+    // Protect this endpoint by requiring a secret header. Set the secret via
+    // `wrangler secret put EXECUTE_PAYOUT_KEY` or in `wrangler.toml` [vars] (dev/demo only).
+    // The client must send header `x-execute-payout-key: <secret>`.
+    const expectedKey = typeof EXECUTE_PAYOUT_KEY !== 'undefined' ? EXECUTE_PAYOUT_KEY : null;
+    const providedKey = request.headers.get('x-execute-payout-key');
+    if (!expectedKey || providedKey !== expectedKey) {
+      return new Response(JSON.stringify({ error: 'unauthorized' }), { status: 401, headers: {'content-type':'application/json'} });
+    }
     try {
       const body = await request.json().catch(()=>({}));
       // Simple simulation of a tx id
