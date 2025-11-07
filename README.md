@@ -207,6 +207,52 @@ Security reminder: for production flows do not include sensitive API keys in cli
 - Use a backend or proxy that injects secrets server-side.
 - Or implement an authenticated server-to-server flow where the frontend requests a short-lived token from a trusted backend.
 
+## Deploying the frontend
+
+This project uses Vite for the frontend. The following steps show how to build and preview the site locally, and quick deploy options for collaborators.
+
+Local build & preview (PowerShell):
+
+```powershell
+cd frontend_files
+npm install
+# Build production assets into `dist/`
+npm run build
+# Preview the production build locally (optional)
+npm run preview
+```
+
+Notes:
+- The preview server serves the built `dist/` directory. This is useful to validate the production build locally before deploying.
+- Ensure the runtime env var `VITE_API_URL` points to your backend (for quick testing use the public Worker URL or your local backend).
+
+Deploy options
+
+- Vercel (recommended for fast CI/CD):
+       1. Install the Vercel CLI (optional) and login:
+               ```powershell
+               npm install -g vercel
+               vercel login
+               ```
+       2. From the `frontend_files` directory deploy:
+               ```powershell
+               cd frontend_files
+               vercel --prod
+               ```
+       3. In the Vercel dashboard, add the environment variable `VITE_API_URL` (set to the Worker URL or your API).
+
+- Cloudflare Pages:
+       1. Push the repository to GitHub (already done) and create a new Pages site.
+       2. Configure the build settings:
+               - Build command: `npm run build`
+               - Build output directory: `dist`
+       3. Set the environment variable `VITE_API_URL` in the Pages UI to the public Worker URL.
+
+- Other static hosts (Netlify, S3, etc.):
+       - Build with `npm run build`. Upload the `dist/` folder to the host of your choice.
+
+Security reminder: Always set `VITE_API_URL` via the platform's environment settings (not committed to source). Use `.env.example` as a template for collaborators.
+
 ## Contact & Team
 Team Wipernation — lead: @Wiper15
 
