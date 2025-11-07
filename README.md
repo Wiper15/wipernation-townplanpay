@@ -137,6 +137,76 @@ TownPlanPay’s AI checks image metadata, evaluates consistency, and within **2 
 - Open an issue for each task and add PRs with descriptive titles
 - Add small unit/manual tests for critical flows (e.g., simulate transfer, AI approval)
 
+## Code structure (quick reference)
+
+The repository is organised to separate frontend, serverless AI/worker logic, and utilities.
+Use this section as a quick guide to the main folders and important files:
+
+- `frontend_files/` — React frontend and build tooling
+       - `src/` — React entry and components
+              - `main.jsx` — application entry
+              - `components/` — UI components (MilestoneForm, AIDecisionCard, TransactionHistory, etc.)
+       - `.env.example` — example environment variables (copy to `.env.local` to run)
+       - `vite.config.js` — local dev server and proxy configuration
+
+- `worker/` — Cloudflare Worker code (serverless AI agent)
+       - `index.js` — Worker script implementing `/suggest-milestone` and `/execute-payout`
+       - `wrangler.toml` — Wrangler config for local dev and publishing
+       - Secrets are managed via `wrangler secret put` (do not store API keys in source)
+
+- `ml/` — small ML/validator helpers used for local testing
+- `payments/` — mock or integration helpers for payment providers (e.g. Circle SDK stubs)
+- `frontend/` and `frontend_files/` contain docs and deployment notes for the UI
+
+This layout keeps the UI and serverless logic decoupled so you can run the frontend locally while using a deployed worker endpoint.
+
+## Using the public Worker URL (recommended for quick testing)
+
+We published a public Cloudflare Worker for development. To point the frontend at the public Worker:
+
+1. Copy the example env file to `.env.local` in the frontend folder:
+
+```powershell
+cd frontend_files
+copy .env.example .env.local
+```
+
+2. Make sure `.env.local` contains:
+
+```
+VITE_API_URL=https://townplanpay-worker.esteban-porporato.workers.dev
+```
+
+3. Restart the Vite dev server so it picks up the new env var:
+
+```powershell
+npm run dev -- --host
+```
+
+Notes:
+- Do NOT commit `.env.local` to git (it is ignored by `.gitignore`). Use `.env.example` for safe, versioned defaults.
+- The Worker exposes two endpoints:
+       - `POST /suggest-milestone` — returns an AI decision JSON
+       - `POST /execute-payout` — simulates a payout; protected by header `x-execute-payout-key` (do not expose secrets in client JS)
+
+Example curl calls:
+
+```bash
+curl -X POST https://townplanpay-worker.esteban-porporato.workers.dev/suggest-milestone \
+       -H "Content-Type: application/json" \
+       -d '{"image_score":0.75,"inspector_confidence":0.85,"percent_complete":0.6,"notional_budget":1000}'
+
+curl -X POST https://townplanpay-worker.esteban-porporato.workers.dev/execute-payout \
+       -H "Content-Type: application/json" \
+       -H "x-execute-payout-key: <SECRET>" \
+       -d '{"project_id":"RD-001","milestone":"foundation","amount":600}'
+```
+
+Security reminder: for production flows do not include sensitive API keys in client-side code. Instead:
+
+- Use a backend or proxy that injects secrets server-side.
+- Or implement an authenticated server-to-server flow where the frontend requests a short-lived token from a trusted backend.
+
 ## Contact & Team
 Team Wipernation — lead: @Wiper15
 
