@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Milestone Suggestion</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="container">
+    <h2>Suggest Milestone</h2>
+
+    <textarea id="desc" placeholder="Write milestone description..."></textarea>
+
+    <button id="submitBtn">Submit</button>
+
+    <div id="result" class="hidden">
+      <h3>Suggestion Result</h3>
+      <p><strong>Suggested Amount:</strong> <span id="amount"></span></p>
+      <p><strong>Confidence:</strong> <span id="confidence"></span></p>
+      <p><strong>Explanation:</strong></p>
+      <p id="explanation"></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("submitBtn").addEventListener("click", () => {
+      fetch("./mock.json")
+        .then((res) => res.json())
+        .then((data) => {
+          document.getElementById("result").classList.remove("hidden");
+          document.getElementById("amount").textContent = data.suggested_amount;
+          document.getElementById("confidence").textContent = data.confidence;
+          document.getElementById("explanation").textContent = data.explanation;
+        })
+        .catch(() => alert("Failed to load mock data"));
+    });
+  </script>
+
+</body>
+</html>
