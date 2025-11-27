@@ -5,174 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TownPlanPay - Digital Payment Solutions</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 1rem 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #2c5aa0;
-            text-decoration: none;
-        }
-        
-        .hero {
-            padding: 100px 0 60px;
-            color: white;
-            text-align: center;
-        }
-        
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 12px 30px;
-            background: white;
-            color: #667eea;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: 600;
-            transition: transform 0.3s;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-        
-        .features {
-            padding: 80px 0;
-            background: white;
-        }
-        
-        .features h2 {
-            text-align: center;
-            margin-bottom: 3rem;
-            font-size: 2.5rem;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .feature-card {
-            padding: 2rem;
-            background: #f8f9fa;
-            border-radius: 10px;
-            text-align: center;
-        }
-        
-        .feature-card h3 {
-            color: #2c5aa0;
-            margin-bottom: 1rem;
-        }
-        
-        .milestones {
-            padding: 80px 0;
-            background: #f8f9fa;
-        }
-        
-        .milestones h2 {
-            text-align: center;
-            margin-bottom: 3rem;
-            font-size: 2.5rem;
-        }
-        
-        .milestone-list {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .milestone-item {
-            background: white;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .status {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-left: 1rem;
-        }
-        
-        .status.completed {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .status.in-progress {
-            background: #fff3cd;
-            color: #856404;
-        }
-        
-        .status.pending {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        
-        .footer {
-            background: #333;
-            color: white;
-            padding: 2rem 0;
-            text-align: center;
-        }
-        
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero p {
-                font-size: 1.1rem;
-            }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .navbar { background: rgba(255, 255, 255, 0.95); padding: 1rem 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: #2c5aa0; text-decoration: none; }
+        .hero { padding: 100px 0 60px; color: white; text-align: center; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 1rem; }
+        .hero p { font-size: 1.3rem; margin-bottom: 2rem; opacity: 0.9; }
+        .btn { display: inline-block; padding: 12px 30px; background: white; color: #667eea; text-decoration: none; border-radius: 5px; font-weight: 600; transition: transform 0.3s; }
+        .btn:hover { transform: translateY(-2px); }
+        .features { padding: 80px 0; background: white; }
+        .features h2 { text-align: center; margin-bottom: 3rem; font-size: 2.5rem; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .feature-card { padding: 2rem; background: #f8f9fa; border-radius: 10px; text-align: center; }
+        .feature-card h3 { color: #2c5aa0; margin-bottom: 1rem; }
+        .milestones { padding: 80px 0; background: #f8f9fa; }
+        .milestones h2 { text-align: center; margin-bottom: 3rem; font-size: 2.5rem; }
+        .milestone-list { max-width: 800px; margin: 0 auto; }
+        .milestone-item { background: white; padding: 1.5rem; margin-bottom: 1rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .status { display: inline-block; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-left: 1rem; }
+        .status.completed { background: #d4edda; color: #155724; }
+        .status.in-progress { background: #fff3cd; color: #856404; }
+        .status.pending { background: #f8d7da; color: #721c24; }
+        .footer { background: #333; color: white; padding: 2rem 0; text-align: center; }
+        @media (max-width: 768px) { .hero h1 { font-size: 2.5rem; } .hero p { font-size: 1.1rem; } }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="navbar">
         <div class="container nav-container">
             <a href="#" class="logo">TownPlanPay</a>
@@ -181,75 +42,39 @@
             </div>
         </div>
     </nav>
-
-    <!-- Hero Section -->
     <section class="hero">
         <div class="container">
             <h1>Revolutionizing Digital Payments</h1>
-            <p>Smart contract-powered payment solutions with automated milestone tracking and Web3 integration</p>
+            <p>AI-powered USDC disbursements for municipal projects. Starting with Nigeria, built for every municipality worldwide.</p>
             <a href="#milestones" class="btn">View Project Progress</a>
         </div>
     </section>
-
-    <!-- Features -->
     <section class="features">
         <div class="container">
             <h2>Key Features</h2>
             <div class="features-grid">
-                <div class="feature-card">
-                    <h3>🔐 Smart Contracts</h3>
-                    <p>Automated payment releases based on milestone completion with blockchain security</p>
-                </div>
-                <div class="feature-card">
-                    <h3>📊 Milestone Tracking</h3>
-                    <p>Real-time progress monitoring with transparent payment triggers</p>
-                </div>
-                <div class="feature-card">
-                    <h3>🌐 Web3 Integration</h3>
-                    <p>Built on modern blockchain technology for secure, transparent transactions</p>
-                </div>
+                <div class="feature-card"><h3>🔐 Smart Contracts</h3><p>Automated payment releases based on milestone completion</p></div>
+                <div class="feature-card"><h3>📊 Milestone Tracking</h3><p>Real-time progress monitoring with transparent payment triggers</p></div>
+                <div class="feature-card"><h3>🌐 Web3 Integration</h3><p>Built on modern blockchain technology for secure transactions</p></div>
             </div>
         </div>
     </section>
-
-    <!-- Milestones -->
     <section class="milestones" id="milestones">
         <div class="container">
             <h2>Project Milestones</h2>
             <div class="milestone-list">
-                <div class="milestone-item">
-                    <strong>Define Pilot Project Requirements</strong>
-                    <span class="status completed">Completed</span>
-                    <p>Detailed specification of payment workflows and user stories</p>
-                </div>
-                <div class="milestone-item">
-                    <strong>Deploy Smart Contract on Testnet</strong>
-                    <span class="status in-progress">In Progress</span>
-                    <p>Smart contract deployment on Arc blockchain testnet</p>
-                </div>
-                <div class="milestone-item">
-                    <strong>Build AI Evidence Verification</strong>
-                    <span class="status pending">Pending</span>
-                    <p>AI-powered verification system for milestone completion</p>
-                </div>
-                <div class="milestone-item">
-                    <strong>Integrate Circle Payments API</strong>
-                    <span class="status pending">Pending</span>
-                    <p>Seamless fiat-to-crypto payment processing integration</p>
-                </div>
+                <div class="milestone-item"><strong>Define Pilot Project Requirements</strong><span class="status completed">Completed</span><p>Detailed specification of payment workflows</p></div>
+                <div class="milestone-item"><strong>Deploy Smart Contract on Testnet</strong><span class="status in-progress">In Progress</span><p>Smart contract deployment on Arc blockchain testnet</p></div>
+                <div class="milestone-item"><strong>Build AI Evidence Verification</strong><span class="status pending">Pending</span><p>AI-powered verification system for milestone completion</p></div>
+                <div class="milestone-item"><strong>Integrate Circle Payments API</strong><span class="status pending">Pending</span><p>Seamless fiat-to-crypto payment processing</p></div>
             </div>
         </div>
     </section>
-
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <p>&copy; 2024 TownPlanPay. Built by Iniubong Ebong</p>
-            <p>
-                <a href="https://github.com/Wiper15" style="color: white; margin: 0 1rem;">GitHub</a>
-                <a href="https://wiper15.github.io" style="color: white; margin: 0 1rem;">Portfolio</a>
-            </p>
+            <p><a href="https://github.com/Wiper15" style="color: white; margin: 0 1rem;">GitHub</a><a href="https://wiper15.github.io" style="color: white; margin: 0 1rem;">Portfolio</a></p>
         </div>
     </footer>
 </body>
-              </html>
+</html>
